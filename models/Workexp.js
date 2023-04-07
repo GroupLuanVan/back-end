@@ -9,5 +9,5 @@ const workexpSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Workexp = mongoose.model("Salarytype", workexppeSchema);
+const Workexp = mongoose.model("Workexp", workexpSchema);
 module.exports = Workexp;

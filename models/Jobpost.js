@@ -1,11 +1,18 @@
 const mongoose = require ('mongoose');
+const Address = require ('./Address.js');
+// const Company = require ('./Company.js');
+// const Jobcategory = require ('./Jobcategory.js');
+// const Worktype = require ('./Worktype.js');
+// const Workexp = require ('./Workexp.js');
+// const Position = require ('./Position.js');
+
 
 const jobpostSchema = new mongoose.Schema({
     //tieu de
     title: { type: String },
 
     //dia chi
-    location: {
+    addressId: {
       type: mongoose.Schema.ObjectId,
       ref: "addresss",
       required: true
@@ -97,7 +104,7 @@ const jobpostSchema = new mongoose.Schema({
     },
 
     // loai cong viec (Back-end,...)
-    categoryId: {
+    jobcategoryId: {
       type: mongoose.Schema.ObjectId,
       ref: "Jobcategory",
       required: true,

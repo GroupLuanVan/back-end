@@ -33,7 +33,7 @@ exports.login = async (req, res, next)=>{
         }else{
             //Error: password is not correct
         }
-        }catch(error){
+    }catch(error){
         res.json(error);
     }
 }

@@ -9,5 +9,5 @@ const jobcategorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Jobcategory = mongoose.model("Jobcategory", jobCategorySchema);
-export default Jobcategory;
+const Jobcategory = mongoose.model("Jobcategory", jobcategorySchema);
+module.exports = Jobcategory;

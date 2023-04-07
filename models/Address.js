@@ -1,7 +1,7 @@
 const mongoose = require ('mongoose');
 //tim bang ID
 
-const AddressSchema = new mongoose.Schema(
+const addressSchema = new mongoose.Schema(
   {
     title: String,
    

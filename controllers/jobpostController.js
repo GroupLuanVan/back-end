@@ -1,14 +1,19 @@
 const Jobpost = require('../models/Jobpost');
+const Company = require ('../models/Company');
+// const Jobcategory = require ('../models/Jobcategory');
+// const Worktype = require ('../models/Worktype');
+// const Workexp = require ('../models/Workexp');
+// const Position = require ('../models/Position');
 
 //Get All Post
 exports.getAllJobposts = async (req, res, next)=>{
     try{
         //lay bai post dua tren ID sau day truy ra ten tac gia
-        const jobpost = await Jobpost.find({}).populate('Company');
+        const jobpost = await Jobpost.find(req.query).populate('companyId');
         //post.length: dem co bao nhieu bai post
         res.status(200).json({
             status: 'success',
-            results: posts.length,
+            // results: posts.length,
             data:{jobpost}
         })
     }catch(error){
@@ -25,11 +30,7 @@ exports.createOneJobpost = async (req, res, next)=>{
         const jobpost = await Jobpost.create({...req.body, company: userId});
         
         //post.length: dem co bao nhieu bai post
-        res.status(200).json({
-            status: 'success',
-            results: posts.length,
-            data:{jobpost}
-        })
+        res.status(200).send("Tạo jobpost thành công!");
     }catch(error){
         res.json(error)
     }
