@@ -42,6 +42,6 @@ const resumeSchema = new mongoose.Schema(
 );
 
 const Resume = mongoose.model("Resume", resumeSchema);
-export default Resume;
+module.exports = Resume;
 
 

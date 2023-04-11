@@ -11,6 +11,7 @@ const cors = require('cors');
 //Import Route
 const authRoute = require('./routes/authRoute');
 const jobpostRoute = require('./routes/jobpostRoute');
+const userRoute = require('./routes/userRoute')
 
 const { register } = require('./controllers/authController');
 
@@ -26,7 +27,7 @@ app.use(express.json());
 //Mount the Route (ket noi Route toi server)
 app.use('/api/auth', authRoute);
 app.use('/api/jobpost', jobpostRoute);
-
+app.use('/api/user', userRoute);
 //cong 5000
 const port = process.env.APP_PORT;
 

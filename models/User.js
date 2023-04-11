@@ -4,7 +4,16 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
     name:{type: String, unique: true, trim: true, required: [true, 'Name must be required']},  //trim: cat dang truoc va sau ten
     email:{type: String, unique: true, trim: true, required: [true, 'Email must be required']},
-    password:{type: String, trim: true, required: [true, 'Password must be required'], minlenght:[6, 'Password must be at least 6 character'] }
+    password:{type: String, trim: true, required: [true, 'Password must be required'], minlenght:[6, 'Password must be at least 6 character'] },
+    role: {
+        type: String,
+        enum: ["candidate", "recruiter", "admin"],
+        default: "candidate",
+      },
+      isAdmin: {
+        type: Boolean,
+        default: false,
+      },
 }, {timestamps: true})
 
 userSchema.pre('save',function(next){
