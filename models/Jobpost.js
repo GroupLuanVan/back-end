@@ -85,16 +85,8 @@ const jobpostSchema = new mongoose.Schema({
       type: String,
     },
 
-    descriptionText: {
-      type: String,
-    },
-
     //yeu cau cong viec
     required: {
-      type: String,
-    },
-
-    requiredText: {
       type: String,
     },
 
