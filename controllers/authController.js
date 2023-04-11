@@ -10,7 +10,7 @@ exports.register = async (req, res, next)=>{
   
         //Create new user
         const newUser = await new User({
-          username: nameInp,
+          username: usernameInp,
           email: emailInp,
           role: roleInp,
           password: hashed,
