@@ -36,7 +36,7 @@ const candidateSchema = new Schema(
 
     gender: {
       type: String,
-
+      enum: ["Nam", "Nữ"],
     },
 
     email: String,

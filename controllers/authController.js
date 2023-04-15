@@ -43,7 +43,8 @@ exports.register = async (req, res, next)=>{
         if (user.role == "candidate") {
           const newCandidate = new Candidate({
             userId: user._id,
-            email: user.email
+            email: user.email,
+            gender: req.body.gender
           });
 
           await newCandidate.save();
