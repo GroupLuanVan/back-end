@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const Candidate = require('../models/Candidate');
-const Recruiter = require('../models/Recruiter');
+const Company = require('../models/Company');
 
 //GET ALL USER (trừ admin)
 exports.getAllUsers = async (req, res, next) => {
@@ -18,7 +18,7 @@ exports.deleteUser = async (req, res, next) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (deletedUser === null)
-    res.status(404).json("Không tìm thấy user rồi");
+    return res.status(404).json("Không tìm thấy user rồi");
 
     if (deletedUser.role !== "admin") {
       try {

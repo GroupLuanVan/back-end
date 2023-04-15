@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-    name:{type: String, unique: true, trim: true, required: [true, 'Name must be required']},  //trim: cat dang truoc va sau ten
-    email:{type: String, unique: true, trim: true, required: [true, 'Email must be required']},
-    password:{type: String, trim: true, required: [true, 'Password must be required'], minlenght:[6, 'Password must be at least 6 character'] },
+    username:{type: String, trim: true, required: [true, 'Tên người dùng không được để trống']},  //trim: cat dang truoc va sau ten
+    email:{type: String, unique: true, trim: true, required: [true, 'Email không được để trống']},
+    password:{type: String, trim: true, required: [true, 'Password không được để trống'], minlenght:[6, 'Password phải có ít nhất 6 ký tự'] },
     role: {
       type: String,
       enum: ["candidate", "recruiter", "admin"],
@@ -16,17 +16,17 @@ const userSchema = new mongoose.Schema({
     },
 }, {timestamps: true})
 
-userSchema.pre('save',function(next){
-    let user = this;
-    bcrypt.hash(user.password, 10, function(error, hash){
-        if (error){
-            return next(error);
-        }else{
-            user.password = hash;
-            next()
-        }
-    })
-})
+// userSchema.pre('save',function(next){
+//     let user = this;
+//     bcrypt.hash(user.password, 10, function(error, hash){
+//         if (error){
+//             return next(error);
+//         }else{
+//             user.password = hash;
+//             next()
+//         }
+//     })
+// })
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

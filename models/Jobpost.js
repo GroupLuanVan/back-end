@@ -23,9 +23,8 @@ const jobpostSchema = new mongoose.Schema({
 
     //hinh thuc lam viec (toan thoi gian, ban thoi gian)
     workTypeId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Worktype",
-      required: true
+      type: String,
+      enum: ["fulltime", "part-time", "remote"]
     },
 
     //ngay het han nhan ho so
@@ -33,9 +32,8 @@ const jobpostSchema = new mongoose.Schema({
 
     //kinh nghiem lam viec
     workExpId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workexp",
-      required: true
+      type: String,
+      enum: ["Không yêu cầu", "Dưới 1 năm", "1 năm", "2 năm", "3 năm", "4 năm", "5 năm", "Trên 5 năm"]
     },
 
     //vi tri lam viec (fresher, intern,... )
@@ -58,11 +56,10 @@ const jobpostSchema = new mongoose.Schema({
       default: "USD",
     },
 
-    //muc luong ( thoa thuan, trong khoan)
+    //muc luong ( thoa thuan, trong khoang)
     salaryTypeId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Salarytype",
-      required: true
+      type: String,
+      enum: ["Thỏa thuận", "Trong khoảng"]
     },
 
     // muc luong thap nhat
@@ -79,7 +76,7 @@ const jobpostSchema = new mongoose.Schema({
     fullAddress: {
       type: String,
     },
-
+  
     // mo ta cong viec
     description: {
       type: String,
@@ -96,7 +93,7 @@ const jobpostSchema = new mongoose.Schema({
     },
 
     // loai cong viec (Back-end,...)
-    jobcategoryId: {
+    categoryId: {
       type: mongoose.Schema.ObjectId,
       ref: "Jobcategory",
       required: true,
@@ -109,12 +106,6 @@ const jobpostSchema = new mongoose.Schema({
       required: true,
     },
 
-    // id nguoi tuyen dung
-    recruiterId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Recruiter",
-      required: true,
-    },
 
     //luot xem
     viewCount: {

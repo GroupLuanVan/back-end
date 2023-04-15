@@ -31,7 +31,7 @@ const candidateSchema = new Schema(
     {
     title: String,
     //contact info
-    name: String,
+    nameCandidate: String,
     dob: Date,
 
     gender: {
@@ -49,8 +49,6 @@ const candidateSchema = new Schema(
     fullAddress: String,
 
     avatar: String,
-
-    age: { type: Number },
 
     profile: {
         type: profileSchema
