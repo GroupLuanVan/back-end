@@ -81,7 +81,7 @@ exports.login = async (req, res, next)=>{
         const token = jwk.sign({userId: user._id}, process.env.APP_SECRET);
         res.status(200).json({
             status: 'success',
-            data: {token, userName: user.name, userRole: user.role}
+            data: {token, userName: user.username, userRole: user.role}
         })
     }else{
         //Error: password is not correct

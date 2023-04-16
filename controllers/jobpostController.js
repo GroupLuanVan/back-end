@@ -68,7 +68,7 @@ exports.createOneJobpost = async (req, res, next)=>{
         //tao bai post
         const jobpost = await Jobpost.create({...req.body, company: userId});
         
-        //post.length: dem co bao nhieu bai post
+        
         res.status(200).send("Tạo jobpost thành công!");
     }catch(error){
         res.json(error)
