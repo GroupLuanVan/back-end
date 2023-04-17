@@ -27,6 +27,9 @@ exports.register = async (req, res, next)=>{
 //   }    
 // }
   try{
+    let email = await User.findOne({email:req.body.email});
+    if(email) return res.status(200).json("Email này đã được đăng ký");
+
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     const user = new User({
@@ -35,7 +38,7 @@ exports.register = async (req, res, next)=>{
       role: req.body.role,
       password: hash,
     });
-    // if (req.body.role == "admin") newUser.isAdmin = true;
+    if (req.body.role == "admin") user.isAdmin = true;
 
     await user.save();
     if (req.body.role !== "admin") {
