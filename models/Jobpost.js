@@ -14,7 +14,7 @@ const jobpostSchema = new mongoose.Schema({
     //dia chi
     addressId: {
       type: mongoose.Schema.ObjectId,
-      ref: "Addresss",
+      ref: "Address",
       required: true
     },
     
