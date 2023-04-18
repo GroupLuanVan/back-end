@@ -81,10 +81,10 @@ exports.login = async (req, res, next)=>{
     }
 
     if(bcrypt.compareSync(req.body.password, user.password)){
-        const token = jwk.sign({userId: user._id}, process.env.APP_SECRET);
+        const token = jwk.sign({userId: user._id, isAdmin: user.isAdmin}, process.env.APP_SECRET);
         res.status(200).json({
             status: 'success',
-            data: {token, userName: user.username, userRole: user.role}
+            data: {token, user}
         })
     }else{
         //Error: password is not correct
