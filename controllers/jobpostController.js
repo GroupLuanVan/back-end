@@ -1,9 +1,9 @@
 const Jobpost = require('../models/Jobpost');
 const Company = require ('../models/Company');
-// const Jobcategory = require ('../models/Jobcategory');
+const Jobcategory = require ('../models/Jobcategory');
 // const Worktype = require ('../models/Worktype');
 // const Workexp = require ('../models/Workexp');
-// const Position = require ('../models/Position');
+const Position = require ('../models/Position');
 
 //Get All Post
 exports.getAllJobposts = async (req, res, next)=>{
@@ -65,13 +65,18 @@ exports.createOneJobpost = async (req, res, next)=>{
     try{
         const {userId} = req.user;
         
-        //tao bai post
-        const jobpost = await Jobpost.create({...req.body, company: userId});
-        
+        //tìm công ty theo userId
+        let company = await Company.findOne({ userId });
+        const jobpost = new Jobpost({
+            ...req.body,
+            companyId: company._id
+        });
+        await jobpost.save();
         
         res.status(200).send("Tạo jobpost thành công!");
     }catch(error){
-        res.json(error)
+        console.log(error);
+        return res.status(404).json("Tạo bài đăng tuyển dụng không thành công");
     }
 }
 

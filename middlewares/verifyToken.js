@@ -46,3 +46,10 @@ exports.checkAdmin = (req, res, next) => {
         res.status(403).json("Bạn không phải là Admin");
     }
   };
+
+exports.getDecodedTokenData = (inpReq) => {
+    const token = inpReq.cookies.access_token;
+    const tokenData = jwt_decode(token);
+    return tokenData;
+  
+  }

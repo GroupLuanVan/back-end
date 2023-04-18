@@ -22,16 +22,16 @@ const jobpostSchema = new mongoose.Schema({
     amount: { type: Number },
 
     //hinh thuc lam viec (toan thoi gian, ban thoi gian)
-    workTypeId: {
+    workType: {
       type: String,
-      enum: ["fulltime", "part-time", "remote"]
+      enum: ["full-time", "part-time", "remote"]
     },
 
     //ngay het han nhan ho so
     endDate: { type: Date },
 
     //kinh nghiem lam viec
-    workExpId: {
+    workExp: {
       type: String,
       enum: ["Không yêu cầu", "Dưới 1 năm", "1 năm", "2 năm", "3 năm", "4 năm", "5 năm", "Trên 5 năm"]
     },
@@ -57,7 +57,7 @@ const jobpostSchema = new mongoose.Schema({
     },
 
     //muc luong ( thoa thuan, trong khoang)
-    salaryTypeId: {
+    salaryType: {
       type: String,
       enum: ["Thỏa thuận", "Trong khoảng"]
     },
