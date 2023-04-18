@@ -63,7 +63,7 @@ exports.getAllJobpostsBaseOnCompany = async (req, res, next)=>{
 // Get  Post base on postId
 exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
     try {
-        const jobpost = await Jobpost.findById(req.params.id);
+        const jobpost = await Jobpost.findById(req.params.id).populate('companyId').populate('positionId').populate('categoryId');
         await Jobpost.findByIdAndUpdate(jobpost._id, { viewCount: jobpost.viewCount + 1 })
     
         if (jobpost == null)
