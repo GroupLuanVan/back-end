@@ -18,7 +18,7 @@ exports.deleteUser = async (req, res, next) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (deletedUser === null)
-    return res.status(404).json("Không tìm thấy user rồi");
+      return res.status(404).json("Không tìm thấy user ");
 
     if (deletedUser.role !== "admin") {
       try {
@@ -27,7 +27,7 @@ exports.deleteUser = async (req, res, next) => {
             userId: req.params.id,
           });
         } else if (deletedUser.role === "recruiter") {
-          let deletedRecruiter = await Recruiter.deleteOne({
+          let deletedRecruiter = await Company.deleteOne({
             userId: req.params.id,
           });
         }

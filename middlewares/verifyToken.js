@@ -13,7 +13,8 @@ exports.verifyToken = (req, res, next) => {
         //Xac thuc token
         jwk.verify(token, process.env.APP_SECRET, (err, user)=>{
             if(err){
-                res.status(403).json("Token không khả dụng");
+                
+                return res.status(403).json("Token không khả dụng");
             }
             //gan token /assign token
             req.user = user;
