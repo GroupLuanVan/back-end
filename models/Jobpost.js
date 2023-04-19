@@ -24,7 +24,7 @@ const jobpostSchema = new mongoose.Schema({
     //hinh thuc lam viec (toan thoi gian, ban thoi gian)
     workType: {
       type: String,
-      enum: ["full-time", "part-time", "remote"]
+      enum: ["Toàn thời gian", "Bán thời gian", "Làm từ xa"]
     },
 
     //ngay het han nhan ho so
