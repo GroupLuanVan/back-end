@@ -45,19 +45,15 @@ exports.getAllJobposts = async (req, res, next)=>{
 }
 
 // Get All Post base on Company
-exports.getAllJobpostsBaseOnCompany = async (req, res, next)=>{
-    try{
-        //lay bai post dua tren ID sau day truy ra ten tac gia
-        const jobpost = await Jobpost.find(req.query).populate('companyId');
-        //post.length: dem co bao nhieu bai post
-        res.status(200).json({
-            status: 'success',
-            results: posts.length,
-            data:{jobpost}
-        })
-    }catch(error){
-        res.json(error)
-    }
+exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
+  try {
+    const allJobs = await Jobpost.find({companyId: (req.params.id)}).populate("companyId");
+    if (allJobs == null)
+          return res.status(404).send("Không tìm thấy bài đăng tuyển dụng");
+    res.status(200).json({ result: allJobs.length, jobsPage: allJobs });
+  } catch (err) {
+    next(err);
+  }
 }
 
 // Get  Post base on postId
@@ -71,7 +67,7 @@ exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
     
         res.status(200).json({ ...jobpost._doc, companyId: jobpost.companyId });
       } catch (err) {
-        console.log(err)
+        console.log(err);
         next(err);
       }
 }
