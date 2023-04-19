@@ -16,6 +16,8 @@ const jobcategoryRoute = require('./routes/jobcategoryRoute.js');
 const positionRoute = require('./routes/positionRoute');
 const addressRoute = require('./routes/addressRoute');
 const companyRoute = require('./routes/companyRoute');
+const contactRoute = require('./routes/contactRoute');
+const candidateRoute = require('./routes/candidateRoute');
 
 const { register } = require('./controllers/authController');
 
@@ -36,6 +38,8 @@ app.use('/api/jobcategory', jobcategoryRoute);
 app.use('/api/position', positionRoute);
 app.use('/api/address', addressRoute);
 app.use('/api/company', companyRoute);
+app.use("/api/contact", contactRoute);
+app.use("/api/candidate", candidateRoute);
 //cong 5000
 const port = process.env.APP_PORT;
 

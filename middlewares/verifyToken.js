@@ -50,7 +50,7 @@ exports.checkAdmin = (req, res, next) => {
 
 exports.getDecodedTokenData = (inpReq) => {
     const token = inpReq.cookies.access_token;
-    const tokenData = jwt_decode(token);
+    const tokenData = jwk_decode(token);
     return tokenData;
   
   }
