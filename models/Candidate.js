@@ -33,12 +33,12 @@ const candidateSchema = new Schema(
     //contact info
     nameCandidate: String,
     dob: Date,
-
+    
     gender: {
       type: String,
       enum: ["Nam", "Nữ"],
     },
-
+    avatarLink: String,
     email: String,
     phone: String,
     addressId: {

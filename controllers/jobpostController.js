@@ -59,16 +59,16 @@ exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
 // Get  Post base on postId
 exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
     try {
-        const jobpost = await Jobpost.findById(req.params.id).populate('companyId').populate('positionId').populate('categoryId').populate('addressId');
-        await Jobpost.findByIdAndUpdate(jobpost._id, { viewCount: jobpost.viewCount + 1 })
-    
-        if (jobpost == null)
-          return res.status(404).send("Không tìm thấy bài đăng tuyển dụng");
-    
-        res.status(200).json({ ...jobpost._doc, companyId: jobpost.companyId });
-      } catch (err) {
-        console.log(err);
-        next(err);
+      const jobPost = await Jobpost.findById(req.params.id).populate("companyId");
+      await Jobpost.findByIdAndUpdate(jobPost._id, { viewCount: jobPost.viewCount + 1 })
+  
+      if (jobPost === null)
+        return next(createError(404, "Không tìm thấy bài đăng tuyển dụng"));
+  
+      res.status(200).json({ ...jobPost._doc, companyId: jobPost.companyId });
+    } catch (err) {
+      console.log(err)
+      next(err);
       }
 }
 
