@@ -58,19 +58,20 @@ exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
 
 // Get  Post base on postId
 exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
-    try {
-      const jobPost = await Jobpost.findById(req.params.id).populate("companyId");
-      await Jobpost.findByIdAndUpdate(jobPost._id, { viewCount: jobPost.viewCount + 1 })
-  
-      if (jobPost === null)
-        return next(createError(404, "Không tìm thấy bài đăng tuyển dụng"));
-  
-      res.status(200).json({ ...jobPost._doc, companyId: jobPost.companyId });
-    } catch (err) {
-      console.log(err)
-      next(err);
-      }
+  try {
+    const jobPost = await Jobpost.findById(req.params.id).populate("companyId");
+    
+
+    if (jobPost === null) return res.status(404).json("Không tìm thấy bài đăng tuyển dụng");
+
+    await Jobpost.findByIdAndUpdate(jobPost._id, { viewCount: jobPost.viewCount + 1 });
+    return res.status(200).json({ ...jobPost._doc, companyId: jobPost.companyId });
+  } catch (err) {
+    console.log(err)
+    next(err);
+    }
 }
+
 
 //Create One Post
 exports.createOneJobpost = async (req, res, next)=>{
@@ -96,11 +97,11 @@ exports.createOneJobpost = async (req, res, next)=>{
 //Update One Post
 exports.updateOneJobpost = async (req, res, next)=>{
     try{
-        const {jobpostId} = req.param;
+        // const {jobpostId} = req.param;
         
         //chinh sua post
         //new: true -> thay vi phan hoi bai post cu thi no phan hoi bai post moi
-        const jobpost =  await Jobpost.findByIdAndUpdate(jobpostId, {...req.body}, {new: true, runValidator: true});
+        const jobpost =  await Jobpost.findByIdAndUpdate(req.params.id, {...req.body}, {new: true, runValidator: true});
         
         res.status(200).json({
             status: 'success',
@@ -114,17 +115,18 @@ exports.updateOneJobpost = async (req, res, next)=>{
 //Delete One Post
 exports.deleteOneJobpost = async (req, res, next)=>{
     try{
-        const {jobpostId} = req.param;
+        
         
         //xoa post
         //new: true -> thay vi phan hoi bai post cu thi no phan hoi bai post moi
-        await Jobpost.findByIdAndDelete(jobpostId);
+        await Jobpost.findByIdAndDelete(req.params.id);
         
         res.status(200).json({
             status: 'success',
-            message:'Post has been delete'
+            message:'Bài đăng tuyển dụng đã được xóa'
         })
     }catch(error){
+      console.log(error);
         res.json(error)
     }
 }
