@@ -1,5 +1,8 @@
 const Candidate = require ('../models/Candidate');
 const Resume = require ('../models/Resume');
+const User = require ('../models/User');
+const Jobpost = require ('../models/Jobpost');
+const Contact = require ('../models/Contact');
 
 exports.updateCandidateProfile = async (req, res, next) => {
   //for candidate
@@ -163,46 +166,53 @@ exports.getMyCV = async (req, res, next) => {
   }
 };
 
+//Ung tuyen bai dang tuyen dung
 exports.applyJob = async (req, res, next) => {
-  //create a contact
+try {
+  
+  const jobpost = await Jobpost.findById(req.params.id);
 
-  try {
-    //req: jobId, recId, resumeId, hrId
-    const { jobId } = req.body;
-    console.log(req.user);
-    const loggedUser = await User.findById(req.user.id);
-    if (!loggedUser) return next(createError(400, "Không tìm thấy user"));
-    const job = await JobPost.findById(jobId);
-    let candidate = await Candidate.findOneAndUpdate(
-      { userId: loggedUser.id },
-      { $push: { applyJobs: job._id } },
-      { new: true }
-    );
+  // console.log(req.user);
 
-    const resume = await Resume.findOne({ candidateId: candidate.id });
-    let contact;
-    if (resume) {
-      contact = await Contact.create({
-        jobPostId: jobId,
-        recId: job.recId,
-        candidateId: candidate._id,
-        resumeId: resume._id,
-      });
-    } else {
-      contact = await Contact.create({
-        jobPostId: jobId,
-        recId: job.recId,
-        candidateId: candidate._id,
-      });
-    }
+  const {userId} = req.user;
+  
 
-    //
+  const loggedUser = await User.findById(userId);
+  
+  if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
+  
+  const candidate = await Candidate.findOneAndUpdate(
+    userId ,
+    { $push: { applyJobs: jobpost.id } },
+    { new: true }
+  );
+  // console.log(candidate);
 
-    res.status(200).json({ applyJobs: [...candidate.applyJobs] });
-  } catch (err) {
-    next(err);
+  const resume = await Resume.findOne(candidate._id );
+  if (resume) {
+    const newcontact = await Contact.create({
+      jobpostId: jobpost.id,
+      companycId: jobpost.companyId,
+      candidateId: candidate._id,
+      resumeId: resume._id,
+    })
+  } else {
+    const newcontact = await Contact.create({
+      jobpostId: jobpost.id,
+      companyId: jobpost.companyId,
+      candidateId: candidate._id,
+    });
   }
+
+  
+
+  res.status(200).json("Đã ứng tuyển");
+} catch (err) {
+  console.log(err);
+  next(err);
+}
 };
+
 exports.cancelapplyjob = async (req, res, next) => {
   //create a contact
   try {

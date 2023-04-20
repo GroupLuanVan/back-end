@@ -10,7 +10,7 @@ const candidateRouter = express.Router();
 candidateRouter.route("/all").get( getAllCandidate);
 candidateRouter.route("/:id/profile").put(verifyTokenAndAdminAuth, updateCandidateProfile);
 candidateRouter.route("/:id/resume").post( createResume).get(verifyToken, getMyCV);
-candidateRouter.route("/:id/applyjob").post( applyJob);
+candidateRouter.route("/applyjob/:id").post( verifyToken, applyJob);
 candidateRouter.route("/:id/cancelapplyjob").post( verifyTokenAndAdminAuth, cancelapplyjob);
 candidateRouter.route("/:id/getuserprofilecvdata").get( getUserProfileCvData);
 

@@ -58,10 +58,9 @@ const candidateSchema = new Schema(
       type: String,
       default: ""
     },
-    resumeId: [{ type: mongoose.Schema.ObjectId, ref: "Resume" }],
+    resumeId: { type: mongoose.Schema.ObjectId, ref: "Resume" },
     applyJobs: [{ type: mongoose.Schema.ObjectId, ref: "Jobpost" }],
 
-    saveJobs: [{ type: mongoose.Schema.ObjectId, ref: "Jobpost" }],
     //one to one
     userId: {
       type: mongoose.Schema.ObjectId,

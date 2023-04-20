@@ -76,9 +76,10 @@ exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
 exports.createOneJobpost = async (req, res, next)=>{
     try{
         const {userId} = req.user;
-        
+        console.log(userId);
         //tìm công ty theo userId
         let company = await Company.findOne({ userId });
+        console.log(company);
         const jobpost = new Jobpost({
             ...req.body,
             companyId: company._id

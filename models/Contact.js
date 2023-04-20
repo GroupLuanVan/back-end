@@ -9,7 +9,7 @@ const mongoose = require ('mongoose');
 
 const contactSchema = new mongoose.Schema(
     {
-        jobPostId: { type: mongoose.Schema.ObjectId, ref: "Jobpost", required: true },
+        jobpostId: { type: mongoose.Schema.ObjectId, ref: "Jobpost", required: true },
         resumeId: {
           type: mongoose.Schema.ObjectId,
           ref: "Resume",
@@ -20,7 +20,7 @@ const contactSchema = new mongoose.Schema(
           ref: "Candidate",
           required: true,
         },
-        recId: { type: mongoose.Schema.ObjectId, ref: "Company", required: true },
+        companyId: { type: mongoose.Schema.ObjectId, ref: "Company", required: true },
     
         process: {
           type: Number,
