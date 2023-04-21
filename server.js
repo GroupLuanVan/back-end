@@ -18,6 +18,7 @@ const addressRoute = require('./routes/addressRoute');
 const companyRoute = require('./routes/companyRoute');
 const contactRoute = require('./routes/contactRoute');
 const candidateRoute = require('./routes/candidateRoute');
+const resumeRoute = require('./routes/resumeRoute');
 
 const { register } = require('./controllers/authController');
 
@@ -40,6 +41,7 @@ app.use('/api/address', addressRoute);
 app.use('/api/company', companyRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/candidate", candidateRoute);
+app.use("/api/resume", resumeRoute);
 //cong 5000
 const port = process.env.APP_PORT;
 

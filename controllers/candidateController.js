@@ -174,10 +174,11 @@ try {
   const loggedUser = await User.findById(req.user.userId);  
   if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
 
-  const contact = await Contact.findOne({jobpostId: jobpost.id})
-  if (contact) return res.status(200).json("Đã ứng tuyển công việc này"); 
+  const candidate = await Candidate.findOne({userId: loggedUser.id});
+  const contact = await Contact.findOne({candidateId: candidate.id})
+  if (contact) return res.status(200).json("Đã ứng tuyển công việc này");
 
-  const candidate = await Candidate.findOneAndUpdate(
+  await Candidate.findOneAndUpdate(
     {userId: loggedUser.id} ,
     { $push: { applyJobs: jobpost.id } },
     
@@ -200,8 +201,7 @@ try {
   }
   
   res.status(200).json({
-    message: "Ứng tuyển thành công",
-    applyJobs: [candidate.applyJobs] 
+    message: "Ứng tuyển thành công"
   }
     );
 } catch (err) {
@@ -217,8 +217,7 @@ exports.cancelapplyjob = async (req, res, next) => {
     console.log(req.params.id);
     const jobpost = await Jobpost.findById(req.params.id);
     
-    const loggedUser = await User.findById(req.user.userId); 
-     
+    const loggedUser = await User.findById(req.user.userId);  
     if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
 
     const contact = await Contact.findOne({jobpostId: jobpost.id})
