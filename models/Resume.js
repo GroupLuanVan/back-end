@@ -5,7 +5,11 @@ const resumeSchema = new mongoose.Schema(
   {
     activities: String,
     activitiesCv: String,
-    address: String,
+    addressId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Address",
+      required: true
+    },
     avatar: String,
     certifications: String,
     certificationsCv: String,
@@ -15,7 +19,7 @@ const resumeSchema = new mongoose.Schema(
     experience: String,
     experienceCv: String,
     fulladdress: String,
-    gender: String,
+    gender: {type: String, enum: ["Nam", "Nữ"]},
     name: String,
     objective: String,
     objectiveCv: String,

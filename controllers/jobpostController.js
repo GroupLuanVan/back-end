@@ -47,7 +47,7 @@ exports.getAllJobposts = async (req, res, next)=>{
 // Get All Post base on Company
 exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
   try {
-    const allJobs = await Jobpost.find({companyId: (req.params.id)}).populate("companyId");
+    const allJobs = await Jobpost.find({companyId: (req.params.id)}).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
     if (allJobs == null)
           return res.status(404).send("Không tìm thấy bài đăng tuyển dụng");
     res.status(200).json({ result: allJobs.length, jobsPage: allJobs });
@@ -59,7 +59,7 @@ exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
 // Get  Post base on postId
 exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
   try {
-    const jobPost = await Jobpost.findById(req.params.id).populate("companyId");
+    const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
     
 
     if (jobPost === null) return res.status(404).json("Không tìm thấy bài đăng tuyển dụng");

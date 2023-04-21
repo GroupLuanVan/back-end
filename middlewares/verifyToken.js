@@ -3,7 +3,7 @@ const jwk = require('jsonwebtoken');
 exports.verifyToken = (req, res, next) => {
     // lay token tu nguoi dung
     const Authorization = req.header('Authorization');
-
+    
     // neu token valid 
     if (Authorization){
         //Lay token /get token

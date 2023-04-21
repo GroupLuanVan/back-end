@@ -8,10 +8,15 @@ const candidateRouter = express.Router();
 
 
 candidateRouter.route("/all").get( getAllCandidate);
-candidateRouter.route("/:id/profile").put(verifyTokenAndAdminAuth, updateCandidateProfile);
-candidateRouter.route("/:id/resume").post( createResume).get(verifyToken, getMyCV);
+candidateRouter.route("/:id/profile").put(verifyToken, verifyTokenAndAdminAuth, updateCandidateProfile);
+
+candidateRouter.route("/resume/create").post( verifyToken, createResume)
+candidateRouter.route("/resume/:id").get(verifyToken, getMyCV);
+
 candidateRouter.route("/applyjob/:id").post( verifyToken, applyJob);
-candidateRouter.route("/:id/cancelapplyjob").post( verifyTokenAndAdminAuth, cancelapplyjob);
+//cancel apply job
+candidateRouter.route("/cancelapplyjob/:id").post(verifyToken, cancelapplyjob);
+
 candidateRouter.route("/:id/getuserprofilecvdata").get( getUserProfileCvData);
 
 module.exports = candidateRouter;

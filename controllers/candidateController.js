@@ -104,47 +104,47 @@ exports.updateCandidateProfile = async (req, res, next) => {
   }
 };
 
+//---------------------------------------------Tao CV---------------------------------
 exports.createResume = async (req, res, next) => {
   try {
-    let loggedUserId = req.user.id;
-
-    let candidate = await Candidate.findOne({ userId: loggedUserId });
-
-    const oldResume = await Resume.findOne({ candidateId: candidate._id });
+    console.log(req.user);
+    const {userId} = req.user;
+    console.log(userId);
+    let candidate = await Candidate.findOne({userId});
+    console.log(candidate.id)
+    const oldResume = await Resume.findOne({candidateId: candidate.id} );
+    console.log(oldResume)
     let savedResume;
     if (oldResume) {
       savedResume = await Resume.findOneAndUpdate(
-        { candidateId: candidate._id },
+        { candidateId: candidate.id },
         { $set: { ...req.body } },
         { new: true }
       );
     } else {
       let resumeToSave = new Resume({
         ...req.body,
-        candidateId: candidate._id,
+        candidateId: candidate.id,
       });
       savedResume = await resumeToSave.save();
     }
-    // let url = `${process.env.DJANGOSERVER}/updateCvsFile`;
-    // const djg = await axios.get(url);
-    // console.log("update db success...");
-    //---
-
+    
     await Candidate.findOneAndUpdate(
-      { _id: candidate._id },
+      { _id: candidate.id },
       {
-        $set: { activatedCvId: savedResume._id },
+        $set: { activatedCvId: savedResume.id },
       },
       { new: true }
     );
 
-    res.status(200).json({ savedResumeId: savedResume._id });
+    res.status(200).json({ savedResumeId: savedResume.id });
   } catch (e) {
     console.log(e);
     next(e);
   }
 };
 
+//----------------------------------------------------------------Hien thi CV-------------------------------------------------
 exports.getMyCV = async (req, res, next) => {
   try {
     let loggedUserId = req.params.id;
@@ -166,25 +166,19 @@ exports.getMyCV = async (req, res, next) => {
   }
 };
 
-//Ung tuyen bai dang tuyen dung
+//--------------------------------------------------------------Ung tuyen bai dang tuyen dung--------------------------------
 exports.applyJob = async (req, res, next) => {
 try {
-  
   const jobpost = await Jobpost.findById(req.params.id);
-
   // console.log(req.user);
-
   const {userId} = req.user;
-  
-
-  const loggedUser = await User.findById(userId);
-  
+  const loggedUser = await User.findById(userId);  
   if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
   
   const candidate = await Candidate.findOneAndUpdate(
     userId ,
     { $push: { applyJobs: jobpost.id } },
-    { new: true }
+    
   );
   // console.log(candidate);
 
@@ -203,36 +197,43 @@ try {
       candidateId: candidate._id,
     });
   }
-
-  
-
-  res.status(200).json("Đã ứng tuyển");
+  console.log(candidate);
+  res.status(200).json({
+    message: "Đã ứng tuyển",
+    applyJobs: [candidate.applyJobs] 
+  }
+    );
 } catch (err) {
   console.log(err);
   next(err);
 }
 };
 
+//--------------------------------------------------------------------------Huy ung tuyen-----------------------------------------------------
 exports.cancelapplyjob = async (req, res, next) => {
   //create a contact
   try {
-    //req: jobId, recId, resumeId, hrId
-    const { jobId } = req.body;
+    //req: jobId, companyId, resumeId, userId
+    const jobpost = await Jobpost.findById(req.params.id);
+    console.log(req.params.id);
     console.log(req.user);
-    const loggedUser = await User.findById(req.user.id);
-    if (!loggedUser) return next(createError(400, "Không tìm thấy user"));
+    
+    const {userId} = req.user;
+    const loggedUser = await User.findById(userId);  
+    if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
 
-    let candidate = await Candidate.findOneAndUpdate(
+    const candidate = await Candidate.findOneAndUpdate(
       { userId: loggedUser.id },
-      { $pull: { applyJobs: jobId } },
+      { $pull: { applyJobs: jobpost.id } },
       { new: true }
     );
+    console.log(candidate);
     //find and remove contact
     await Contact.deleteOne({
-      candidateId: candidate._id,
-      jobPostId: jobId._id,
+      candidateId: candidate.id,
+      jobpostId: jobpost.id,
     });
-    res.status(200).json({ applyJobs: [...candidate.applyJobs] });
+    res.status(200).json("Đã hủy ứng tuyển");
   } catch (err) {
     console.log(err);
     next(err);
