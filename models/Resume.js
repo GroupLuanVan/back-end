@@ -23,6 +23,8 @@ const resumeSchema = new mongoose.Schema(
     name: String,
     objective: String,
     objectiveCv: String,
+    project: String,
+    projectCv: String,
     phone: String,
     skills: String,
     skillsCv: String,
