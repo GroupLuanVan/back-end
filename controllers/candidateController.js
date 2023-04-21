@@ -170,23 +170,24 @@ exports.getMyCV = async (req, res, next) => {
 exports.applyJob = async (req, res, next) => {
 try {
   const jobpost = await Jobpost.findById(req.params.id);
-  // console.log(req.user);
-  const {userId} = req.user;
-  const loggedUser = await User.findById({userId});  
+
+  const loggedUser = await User.findById(req.user.userId);  
   if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
-  
+
+  const contact = await Contact.findOne({jobpostId: jobpost.id})
+  if (contact) return res.status(200).json("Đã ứng tuyển công việc này"); 
+
   const candidate = await Candidate.findOneAndUpdate(
-    userId ,
+    {userId: loggedUser.id} ,
     { $push: { applyJobs: jobpost.id } },
     
   );
-  // console.log(candidate);
  
-  const resume = await Resume.findOne(candidate._id );
+  const resume = await Resume.findOne({candidateId: candidate.id });
   if (resume) {
     const newcontact = await Contact.create({
       jobpostId: jobpost.id,
-      companycId: jobpost.companyId,
+      companyId: jobpost.companyId,
       candidateId: candidate._id,
       resumeId: resume._id,
     })
@@ -194,12 +195,12 @@ try {
     const newcontact = await Contact.create({
       jobpostId: jobpost.id,
       companyId: jobpost.companyId,
-      candidateId: candidate._id,
+      candidateId: candidate.id,
     });
   }
-  console.log(candidate);
+  
   res.status(200).json({
-    message: "Đã ứng tuyển",
+    message: "Ứng tuyển thành công",
     applyJobs: [candidate.applyJobs] 
   }
     );
