@@ -214,21 +214,22 @@ try {
 exports.cancelapplyjob = async (req, res, next) => {
   //create a contact
   try {
-    //req: jobId, companyId, resumeId, userId
-    const jobpost = await Jobpost.findById(req.params.id);
     console.log(req.params.id);
-    console.log(req.user);
+    const jobpost = await Jobpost.findById(req.params.id);
     
-    const {userId} = req.user;
-    const loggedUser = await User.findById(userId);  
+    const loggedUser = await User.findById(req.user.userId); 
+     
     if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
+
+    const contact = await Contact.findOne({jobpostId: jobpost.id})
+    if (!contact) return res.status(200).json("Bạn chưa ứng tuyển vào công việc này"); 
 
     const candidate = await Candidate.findOneAndUpdate(
       { userId: loggedUser.id },
       { $pull: { applyJobs: jobpost.id } },
       { new: true }
     );
-    console.log(candidate);
+    
     //find and remove contact
     await Contact.deleteOne({
       candidateId: candidate.id,
@@ -264,7 +265,7 @@ exports.getUserProfileCvData = async (req, res, next) => {
 };
 
 
-// hiển thị tất cả candidate
+//----------------------------------------------------hiển thị tất cả candidate------------------------------------------------
 exports.getAllCandidate = async (req, res, next) => {
   try {
     const allCandidate = await Candidate.find();
