@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const Address = require ('./Address.js');
 
 const resumeSchema = new mongoose.Schema(
   {

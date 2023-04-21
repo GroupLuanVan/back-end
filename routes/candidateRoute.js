@@ -11,9 +11,12 @@ candidateRouter.route("/all").get( getAllCandidate);
 candidateRouter.route("/:id/profile").put(verifyToken, verifyTokenAndAdminAuth, updateCandidateProfile);
 
 candidateRouter.route("/resume/create").post( verifyToken, createResume)
-candidateRouter.route("/resume/:id").get(verifyToken, getMyCV);
+
+//hien thi CV
+candidateRouter.route("/resume").get(verifyToken, getMyCV);
 
 candidateRouter.route("/applyjob/:id").post( verifyToken, applyJob);
+
 //cancel apply job
 candidateRouter.route("/cancelapplyjob/:id").post(verifyToken, cancelapplyjob);
 

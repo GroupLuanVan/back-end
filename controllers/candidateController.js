@@ -137,7 +137,7 @@ exports.createResume = async (req, res, next) => {
       { new: true }
     );
 
-    res.status(200).json({ savedResumeId: savedResume.id });
+    res.status(200).json({ savedResumeId: savedResume.id , message: "Tạo CV thành công"});
   } catch (e) {
     console.log(e);
     next(e);
@@ -147,16 +147,16 @@ exports.createResume = async (req, res, next) => {
 //----------------------------------------------------------------Hien thi CV-------------------------------------------------
 exports.getMyCV = async (req, res, next) => {
   try {
-    let loggedUserId = req.params.id;
-    const candidate = await Candidate.findOne({ userId: loggedUserId });
+    const {userId} = req.user;
+    const candidate = await Candidate.findOne({userId});
     if (!candidate) {
-      return next(createError(404, "Ứng viên không tồn tại trong hệ thống"));
+      return res.status(400).json("Không tìm thấy người dùng");
     }
 
-    const cv = await Resume.findOne({ candidateId: candidate.id });
+    const cv = await Resume.findOne({ candidateId: candidate.id }).populate("addressId");
 
     if (!cv || cv == undefined) {
-      return next(createError(404, "Cv không tồn tại trong hệ thống"));
+      return res.status(400).json("Chưa tạo CV");
     }
 
     res.status(200).json({ cv });
@@ -172,7 +172,7 @@ try {
   const jobpost = await Jobpost.findById(req.params.id);
   // console.log(req.user);
   const {userId} = req.user;
-  const loggedUser = await User.findById(userId);  
+  const loggedUser = await User.findById({userId});  
   if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
   
   const candidate = await Candidate.findOneAndUpdate(
@@ -181,7 +181,7 @@ try {
     
   );
   // console.log(candidate);
-
+ 
   const resume = await Resume.findOne(candidate._id );
   if (resume) {
     const newcontact = await Contact.create({
