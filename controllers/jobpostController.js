@@ -1,6 +1,6 @@
 const Jobpost = require('../models/Jobpost');
 const Company = require ('../models/Company');
-const Jobcategory = require ('../models/Jobcategory');
+const Contact = require ('../models/Contact');
 // const Worktype = require ('../models/Worktype');
 // const Workexp = require ('../models/Workexp');
 const Position = require ('../models/Position');
@@ -120,7 +120,10 @@ exports.deleteOneJobpost = async (req, res, next)=>{
         //xoa post
         //new: true -> thay vi phan hoi bai post cu thi no phan hoi bai post moi
         await Jobpost.findByIdAndDelete(req.params.id);
-        
+        await Contact.findOneAndUpdate(
+          { jobpostId: req.params.id},
+          {jobpostId: null}
+          );
         res.status(200).json({
             status: 'success',
             message:'Bài đăng tuyển dụng đã được xóa'

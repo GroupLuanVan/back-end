@@ -30,8 +30,19 @@ exports.getAllContact = async (req, res, next) => {
     try {
       const {userId} = req.user;
       const candidate = await Candidate.findOne({userId});
-      const contact = await Contact.find({candidateId: candidate.id}).populate("jobpostId").populate("companyId");
-      if (contact) res.status(200).json(contact);
+      const contact1 = await Contact.find({$and: [{candidateId: candidate.id, jobpostId: null}] }).populate("companyId");
+      console.log(contact1);
+      const contact2 = await Contact.find({$and: [{candidateId: candidate.id, jobpostId:{$ne: null}}]}).populate("jobpostId").populate("companyId");
+      if (contact1 || contact2) res.status(200).jsonp([
+        {message: "Những bài viết đã bị xóa",
+        data: contact1
+        },
+        {
+        data: contact2
+        }
+      ]
+        
+      );
       else 
         return res.status(400).json("Bạn chưa ứng tuyển công việc nào cả");
     } catch (err) {

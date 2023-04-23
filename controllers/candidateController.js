@@ -203,7 +203,7 @@ try {
   
   res.status(200).json({
     message: "Ứng tuyển thành công",
-    data:{jobpostId:jobpost.id}
+    data: {jobpostId:jobpost.id}
   }
     );
 } catch (err) {
@@ -216,26 +216,19 @@ try {
 exports.cancelapplyjob = async (req, res, next) => {
   //create a contact
   try {
-    console.log(req.params.id);
-    const jobpost = await Jobpost.findById(req.params.id);
     
+    const contact = await Contact.findById(req.params.id);
+    console.log(contact._id);
     const loggedUser = await User.findById(req.user.userId);  
     if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
 
-    const contact = await Contact.findOne({jobpostId: jobpost.id})
+    
     if (!contact) return res.status(200).json("Bạn chưa ứng tuyển vào công việc này"); 
-
-    const candidate = await Candidate.findOneAndUpdate(
-      { userId: loggedUser.id },
-      { $pull: { applyJobs: jobpost.id } },
-      { new: true }
-    );
     
     //find and remove contact
-    await Contact.deleteOne({
-      candidateId: candidate.id,
-      jobpostId: jobpost.id,
-    });
+    await Contact.findByIdAndDelete(
+      contact._id
+    );
     res.status(200).json("Đã hủy ứng tuyển");
   } catch (err) {
     console.log(err);
