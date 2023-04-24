@@ -3,7 +3,7 @@ const Company = require ('../models/Company');
 const Contact = require ('../models/Contact');
 // const Worktype = require ('../models/Worktype');
 // const Workexp = require ('../models/Workexp');
-const Position = require ('../models/Position');
+const Candidate = require ('../models/Candidate');
 
 //Get All Post
 exports.getAllJobposts = async (req, res, next)=>{
@@ -72,6 +72,22 @@ exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
     }
 }
 
+// Get  Post base on postId
+exports.getJobpostsBaseOnPostIdWhenLogin = async (req, res, next)=>{
+  try {
+    const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
+    if (jobPost === null) return res.status(404).json("Không tìm thấy bài đăng tuyển dụng");
+    const {userId} = req.user;
+    const candidate = await Candidate.findOne({userId});
+    const contact = await Contact.find({$and: [{candidateId: candidate.id, jobpostId: jobPost.id}] }).populate("companyId");
+    
+    await Jobpost.findByIdAndUpdate(jobPost._id, { viewCount: jobPost.viewCount + 1 });
+    return res.status(200).json({ ...jobPost._doc, companyId: jobPost.companyId , contact: contact});
+  } catch (err) {
+    console.log(err)
+    next(err);
+    }
+}
 
 //Create One Post
 exports.createOneJobpost = async (req, res, next)=>{

@@ -170,34 +170,26 @@ exports.getMyCV = async (req, res, next) => {
 exports.applyJob = async (req, res, next) => {
 try {
   const jobpost = await Jobpost.findById(req.params.id);
-  // console.log(jobpost.id);
-  const loggedUser = await User.findById(req.user.userId);  
-  if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
-  // console.log(loggedUser.id);
-  
-  const candidate = await Candidate.findOne({$and:[{applyJobs: jobpost._id, userId: loggedUser._id}]  });
-  // console.log(candidate);
-  if (candidate) return res.status(200).json("Đã ứng tuyển công việc này");
+  // console.log(jobpost.id); 
+  const {userId} = req.user;
+  const candidate = await Candidate.findOne({userId});
+  const contact = await Contact.findOne({$and: [{candidateId: candidate.id, jobpostId: jobpost.id}] });
+  if(contact) return res.status(400).json({message: "Đã ứng tuyển vào bài đăng này", data: contact});;
 
-  const candidate2 = await Candidate.findOneAndUpdate(
-    {userId: loggedUser.id} ,
-    { $push: { applyJobs: jobpost.id } },
-    
-  );
   // console.log(candidate2);
-  const resume = await Resume.findOne({candidateId: candidate2.id });
+  const resume = await Resume.findOne({candidateId: candidate.id });
   if (resume) {
     const newcontact = await Contact.create({
       jobpostId: jobpost.id,
       companyId: jobpost.companyId,
-      candidateId: candidate2._id,
+      candidateId: candidate._id,
       resumeId: resume._id,
     })
   } else {
     const newcontact = await Contact.create({
       jobpostId: jobpost.id,
       companyId: jobpost.companyId,
-      candidateId: candidate2.id,
+      candidateId: candidate.id,
     });
   }
   
