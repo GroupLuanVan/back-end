@@ -76,7 +76,9 @@ const jobpostSchema = new mongoose.Schema({
     fullAddress: {
       type: String,
     },
-  
+    descriptionText: {
+      type: String,
+    },
     // mo ta cong viec
     description: {
       type: String,
@@ -86,7 +88,10 @@ const jobpostSchema = new mongoose.Schema({
     required: {
       type: String,
     },
-
+    
+    requiredText: {
+      type: String,
+    },
     // quyen loi
     benefit: {
       type: String,
