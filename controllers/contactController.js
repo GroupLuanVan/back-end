@@ -5,7 +5,7 @@ const Candidate = require ('../models/Candidate');
 // ----------------Lay tat ca cac contact (danh cho admin) ----------------------
 exports.getAllContact = async (req, res, next) => {
     try {
-      const contact = await Contact.find();
+      const contact = await Contact.find().populate("jobpostId").populate("candidateId").populate("companyId");
       res.status(200).json(contact);
     } catch (err) {
         next(err);
@@ -16,7 +16,7 @@ exports.getAllContact = async (req, res, next) => {
   exports.getAllContactBaseOnPostId = async (req, res, next) => {
     try {
       const jobpost = await Jobpost.findById(req.params.id);
-      const contact = await Contact.find({jobpostId: jobpost.id}).populate("candidateId").populate("userId");
+      const contact = await Contact.find({jobpostId: jobpost.id}).populate("candidateId");
       if (contact) res.status(200).json(contact);
       else 
         return res.status(400).json("Chưa có ai ứng tuyển bài viết của bạn");

@@ -31,7 +31,7 @@ const candidateSchema = new Schema(
     {
     title: String,
     //contact info
-    nameCandidate: String,
+    nameCandidate: {type: String, trim: true, required: [true, 'Tên người dùng không được để trống']},
     dob: Date,
     
     gender: {

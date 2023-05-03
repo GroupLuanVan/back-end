@@ -33,7 +33,6 @@ exports.register = async (req, res, next)=>{
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
     const user = new User({
-      username: req.body.username,
       email: req.body.email,
       role: req.body.role,
       password: hash,
@@ -45,6 +44,7 @@ exports.register = async (req, res, next)=>{
       try {
         if (user.role == "candidate") {
           const newCandidate = new Candidate({
+            nameCandidate:req.body.nameCandidate,
             userId: user._id,
             email: user.email,
             gender: req.body.gender

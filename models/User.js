@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-    username:{type: String, trim: true, required: [true, 'Tên người dùng không được để trống']},  //trim: cat dang truoc va sau ten
+    
     email:{type: String, unique: true, trim: true, required: [true, 'Email không được để trống']},
     password:{type: String, trim: true, required: [true, 'Password không được để trống'], minlenght:[6, 'Password phải có ít nhất 6 ký tự'] },
     role: {
