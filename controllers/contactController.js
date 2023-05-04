@@ -16,7 +16,7 @@ exports.getAllContact = async (req, res, next) => {
   exports.getAllContactBaseOnPostId = async (req, res, next) => {
     try {
       const jobpost = await Jobpost.findById(req.params.id);
-      const contact = await Contact.find({jobpostId: jobpost.id}).populate("candidateId");
+      const contact = await Contact.find({jobpostId: jobpost.id}).populate("jobpostId").populate("candidateId").populate("companyId");
       if (contact) res.status(200).json(contact);
       else 
         return res.status(400).json("Chưa có ai ứng tuyển bài viết của bạn");

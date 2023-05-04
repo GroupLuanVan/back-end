@@ -40,6 +40,7 @@ exports.register = async (req, res, next)=>{
     if (req.body.role == "admin") user.isAdmin = true;
 
     await user.save();
+
     if (req.body.role !== "admin") {
       try {
         if (user.role == "candidate") {
