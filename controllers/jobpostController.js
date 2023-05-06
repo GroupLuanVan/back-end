@@ -5,7 +5,19 @@ const Contact = require ('../models/Contact');
 // const Workexp = require ('../models/Workexp');
 const Candidate = require ('../models/Candidate');
 
-//Get All Post
+// Get all Jobpost (no limit)
+
+exports.getAllPost = async (req, res, next) => {
+    try {
+      const post = await Jobpost.find().populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
+      res.status(200).json({ result: post.length, jobpost: post });
+    } catch (err) {
+        next(err);
+    }
+  };
+
+
+//Get All Post (limmit 12)
 exports.getAllJobposts = async (req, res, next)=>{
     try {
     let rs;
