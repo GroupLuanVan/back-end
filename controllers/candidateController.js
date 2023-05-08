@@ -173,9 +173,14 @@ try {
   // console.log(jobpost.id); 
   const {userId} = req.user;
   const candidate = await Candidate.findOne({userId});
+  
   const contact = await Contact.findOne({$and: [{candidateId: candidate.id, jobpostId: jobpost.id}] });
   if(contact) return res.status(400).json({message: "Đã ứng tuyển vào bài đăng này", data: contact});;
-
+  const candidate2 = await Candidate.findOneAndUpdate(
+    {userId} ,
+    { $push: { applyJobs: jobpost.id } },
+    
+  );
   // console.log(candidate2);
   const resume = await Resume.findOne({candidateId: candidate.id });
   if (resume) {
@@ -192,7 +197,7 @@ try {
       candidateId: candidate.id,
     });
   }
-  
+
   res.status(200).json({
     message: "Ứng tuyển thành công",
     data: {jobpostId:jobpost.id}
@@ -206,10 +211,11 @@ try {
 
 //--------------------------------------------------------------------------Huy ung tuyen-----------------------------------------------------
 exports.cancelapplyjob = async (req, res, next) => {
-  //create a contact
+  //delete a contact
   try {
     
     const contact = await Contact.findById(req.params.id);
+    const jobpost = await Jobpost.findById(contact.jobpostId);
     console.log(contact._id);
     const loggedUser = await User.findById(req.user.userId);  
     if (!loggedUser) return res.status(400).json("Không tìm thấy người dùng");
@@ -220,6 +226,11 @@ exports.cancelapplyjob = async (req, res, next) => {
     //find and remove contact
     await Contact.findByIdAndDelete(
       contact._id
+    );
+    const candidate = await Candidate.findOneAndUpdate(
+      { userId: loggedUser.id },
+      { $pull: { applyJobs: jobpost.id } },
+      { new: true }
     );
     res.status(200).json("Đã hủy ứng tuyển");
   } catch (err) {
