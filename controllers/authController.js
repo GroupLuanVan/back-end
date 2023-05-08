@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const Candidate = require('../models/Candidate');
 const Company = require('../models/Company');
-const Resume = require('../models/Resume');
+const Contact = require('../models/Contact');
 const jwk = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { filterSkipField } = require('../middlewares/common');
@@ -86,16 +86,19 @@ exports.login = async (req, res, next)=>{
       
       if(user.role == "candidate"){
         let candidate = await Candidate.findOne({ email: user.email });
+        let contact = await Contact.find({$and: [{candidateId: candidate.id, jobpostId:{$ne: null}}]}).populate("jobpostId").populate("resumeId").populate("companyId");
+        
         return res.status(200).json({
           status: 'success',
-          data: {token, user, candidate}
+          data: {token, user, candidate, contact}
         })
+
       }else if(user.role == "recruiter"){
         let company = await Company.findOne({ email: user.email });
-
+        let contact = await Contact.find({$and: [{companyId: company.id, jobpostId:{$ne: null}}]}).populate("jobpostId").populate("resumeId").populate("candidateId");
         return res.status(200).json({
           status: 'success',
-          data: {token, user, company}
+          data: {token, user, company, contact}
         })
       }
 
@@ -104,10 +107,7 @@ exports.login = async (req, res, next)=>{
           data: {token, user}
       });
 
-      
-
-
-
+    
     }else{
         //Error: password is not correct
         return res.status(404).json("Sai mật khẩu");
