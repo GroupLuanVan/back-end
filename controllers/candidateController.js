@@ -203,7 +203,7 @@ try {
 
   res.status(200).json({
     message: "Ứng tuyển thành công",
-    data: {jobpostId:jobpost.id, applyJobs: [candidate3.applyJobs]}
+    data: {jobpostId:jobpost.id, applyJobs: candidate3.applyJobs}
   }
     );
 } catch (err) {
@@ -238,7 +238,7 @@ exports.cancelapplyjob = async (req, res, next) => {
     const candidate3 = await Candidate.findOne({ userId: loggedUser.id })
     res.status(200).json({
       message: "Đã hủy ứng tuyển",
-      data: {applyJobs: [candidate3.applyJobs]}
+      data: {applyJobs: candidate3.applyJobs}
   });
   } catch (err) {
     console.log(err);

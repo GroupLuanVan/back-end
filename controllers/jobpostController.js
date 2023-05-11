@@ -68,7 +68,7 @@ exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
   }
 }
 
-// Get  Post base on postId
+// -------------------------------------------------Get  Post base on postId--------------------------------
 exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
   try {
     const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
@@ -84,7 +84,7 @@ exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
     }
 }
 
-// Get  Post base on postId
+//--------------------------------------------------------- Get  Post base on postId-------------------------------------
 exports.getJobpostsBaseOnPostIdWhenLogin = async (req, res, next)=>{
   try {
     const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
@@ -101,7 +101,7 @@ exports.getJobpostsBaseOnPostIdWhenLogin = async (req, res, next)=>{
     }
 }
 
-//Create One Post
+//--------------------------------------Create One Post--------------------------------------------
 exports.createOneJobpost = async (req, res, next)=>{
     try{
         const {userId} = req.user;
@@ -122,7 +122,7 @@ exports.createOneJobpost = async (req, res, next)=>{
     }
 }
 
-//Update One Post
+//-------------------------------------------Update One Post------------------------------------
 exports.updateOneJobpost = async (req, res, next)=>{
     try{
         // const {jobpostId} = req.param;
@@ -140,7 +140,7 @@ exports.updateOneJobpost = async (req, res, next)=>{
     }
 }
 
-//Delete One Post
+//----------------------------------------------Delete One Post----------------------
 exports.deleteOneJobpost = async (req, res, next)=>{
     try{
         
@@ -160,4 +160,29 @@ exports.deleteOneJobpost = async (req, res, next)=>{
       console.log(error);
         res.json(error)
     }
+}
+
+//---------------------------tìm kiếm theo title và location-------------------------
+exports.findJobpostBaseOnTitleAndLocation = async (req, res, next)=>{
+  try{
+    const title =   req.query.title;
+    const location = req.query.location; 
+    if(title && !location) {
+      const  post = await Jobpost.find({title:title});
+      console.log(!location)
+    } else if(!title && location){
+      const  post = await Jobpost.find({location:/location/});
+    }
+    
+    if(!post) res.status(404).json("Không tìm thấy công việc phù hợp") ;
+    console.log(post);
+    res.status(200).json({
+      status: 'success',
+      data: post.length, post
+  })
+      
+  }catch(error){
+    console.log(error);
+      res.json(error)
+  }
 }

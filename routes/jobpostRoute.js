@@ -1,6 +1,6 @@
 const express = require('express');
 //import cac controller
-const {getAllPost, getAllJobposts, getAllJobpostsBaseOnCompanyId, createOneJobpost, updateOneJobpost, deleteOneJobpost, getJobpostsBaseOnPostId, getJobpostsBaseOnPostIdWhenLogin} = require('../controllers/jobpostController.js');
+const {getAllPost,  getAllJobpostsBaseOnCompanyId, createOneJobpost, updateOneJobpost, deleteOneJobpost, getJobpostsBaseOnPostId, getJobpostsBaseOnPostIdWhenLogin, findJobpostBaseOnTitleAndLocation} = require('../controllers/jobpostController.js');
 
 const jobpostRouter = express.Router();
 
@@ -8,8 +8,8 @@ const jobpostRouter = express.Router();
 const {verifyToken} = require('../middlewares/verifyToken');
 //all post no limit
 jobpostRouter.route('/all/home').get(getAllPost)
-//all post limmit 12
-jobpostRouter.route('/all').get(getAllJobposts)
+//all post base on title or location
+jobpostRouter.route('/all').get(findJobpostBaseOnTitleAndLocation)
 jobpostRouter.route('/').post(verifyToken, createOneJobpost);
 
 jobpostRouter.route('/showallpost/:id').get(getAllJobpostsBaseOnCompanyId);

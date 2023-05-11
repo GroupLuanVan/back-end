@@ -54,10 +54,12 @@ exports.getAllContact = async (req, res, next) => {
 exports.approvalCandidate = async (req, res, next) => {
   try {
     let contact = await Contact.findById(req.params.id);
-    if(!contact) return res.status(400).json("Ứng viên này đã hủy đăng ký");    
-    contact = await Contact.findByIdAndUpdate(req.params.id, req.body.process);
-    let updateContact = await contact.save();
-    res.status(200).json(updateContact);
+    console.log(req.body.process);
+    if(!contact) return res.status(400).json("Ứng viên này đã hủy đăng ký"); 
+    if (req.body.process == 2) contact = await Contact.findByIdAndUpdate(req.params.id, {process: 2});
+    if (req.body.process == 3) contact = await Contact.findByIdAndUpdate(req.params.id, {process: 3});
+    
+    res.status(200).json(contact);
   } catch (err) {
       next(err);
   }
