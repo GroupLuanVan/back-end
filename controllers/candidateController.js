@@ -181,6 +181,7 @@ try {
     { $push: { applyJobs: jobpost.id } },
     
   );
+  const candidate3 = await Candidate.findOne({userId})
   // console.log(candidate2);
   const resume = await Resume.findOne({candidateId: candidate.id });
   if (resume) {
@@ -202,7 +203,7 @@ try {
 
   res.status(200).json({
     message: "Ứng tuyển thành công",
-    data: {jobpostId:jobpost.id, applyJobs: [candidate2.applyJobs]}
+    data: {jobpostId:jobpost.id, applyJobs: [candidate3.applyJobs]}
   }
     );
 } catch (err) {
