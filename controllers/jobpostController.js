@@ -91,7 +91,7 @@ exports.getJobpostsBaseOnPostIdWhenLogin = async (req, res, next)=>{
     if (jobPost === null) return res.status(404).json("Không tìm thấy bài đăng tuyển dụng");
     const {userId} = req.user;
     const candidate = await Candidate.findOne({userId});
-    const contact = await Contact.find({$and: [{candidateId: candidate.id, jobpostId: jobPost.id}] }).populate("companyId");
+    const contact = await Contact.find({$and: [{candidateId: candidate?.id, jobpostId: jobPost?.id}] }).populate("companyId");
     
     await Jobpost.findByIdAndUpdate(jobPost._id, { viewCount: jobPost.viewCount + 1 });
     return res.status(200).json({ ...jobPost._doc, companyId: jobPost.companyId , contact: contact});

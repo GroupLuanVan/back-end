@@ -200,7 +200,7 @@ try {
 
   res.status(200).json({
     message: "Ứng tuyển thành công",
-    data: {jobpostId:jobpost.id}
+    data: {jobpostId:jobpost.id, applyJobs: candidate2.applyJobs}
   }
     );
 } catch (err) {

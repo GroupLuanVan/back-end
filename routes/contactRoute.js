@@ -1,6 +1,6 @@
 const express = require('express');
 
-const {getAllContact, getAllContactBaseOnPostId, getAllContactBaseOnCandidatetId} = require('../controllers/contactController.js');
+const {getAllContact, getAllContactBaseOnPostId, getAllContactBaseOnCandidatetId, approvalCandidate} = require('../controllers/contactController.js');
 const {verifyToken, checkAdmin} = require('../middlewares/verifyToken');
 
 const contactRouter = express.Router();
@@ -13,5 +13,8 @@ contactRouter.route('/candidatelist/:id').get(verifyToken, getAllContactBaseOnPo
 
 //-------------------------Lay contact theo id Candidate (danh cho Candidate) (danh sach nhung bai dang da ung tuyen/ apply list)----------------------------------
 contactRouter.route('/applylist').get(verifyToken, getAllContactBaseOnCandidatetId);
+
+//-------------------------Lay contact theo id Candidate (danh cho Candidate) (danh sach nhung bai dang da ung tuyen/ apply list)----------------------------------
+contactRouter.route('/approval/:id').post(verifyToken, approvalCandidate);
 
 module.exports = contactRouter;
