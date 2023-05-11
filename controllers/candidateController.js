@@ -235,7 +235,11 @@ exports.cancelapplyjob = async (req, res, next) => {
       { $pull: { applyJobs: jobpost.id } },
       { new: true }
     );
-    res.status(200).json("Đã hủy ứng tuyển");
+    const candidate3 = await Candidate.findOne({ userId: loggedUser.id })
+    res.status(200).json({
+      message: "Đã hủy ứng tuyển",
+      data: {applyJobs: [candidate3.applyJobs]}
+  });
   } catch (err) {
     console.log(err);
     next(err);
