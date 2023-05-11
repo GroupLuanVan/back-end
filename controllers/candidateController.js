@@ -188,19 +188,21 @@ try {
       jobpostId: jobpost.id,
       companyId: jobpost.companyId,
       candidateId: candidate._id,
-      resumeId: resume._id,
+      resumeId: resume._id
+      
     })
   } else {
     const newcontact = await Contact.create({
       jobpostId: jobpost.id,
       companyId: jobpost.companyId,
-      candidateId: candidate.id,
+      candidateId: candidate.id
+      
     });
   }
 
   res.status(200).json({
     message: "Ứng tuyển thành công",
-    data: {jobpostId:jobpost.id, applyJobs: candidate2.applyJobs}
+    data: {jobpostId:jobpost.id, applyJobs: [candidate2.applyJobs]}
   }
     );
 } catch (err) {

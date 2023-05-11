@@ -53,9 +53,9 @@ exports.getAllContact = async (req, res, next) => {
 // -----------------------------------------xét duyệt ứng viên------------------------
 exports.approvalCandidate = async (req, res, next) => {
   try {
-    const contact = await Contact.findById(req.params.id);
+    let contact = await Contact.findById(req.params.id);
     if(!contact) return res.status(400).json("Ứng viên này đã hủy đăng ký");    
-    contact = await Contact.updateOne({process : req.body.process});
+    contact = await Contact.findByIdAndUpdate(req.params.id, req.body.process);
     let updateContact = await contact.save();
     res.status(200).json(updateContact);
   } catch (err) {
