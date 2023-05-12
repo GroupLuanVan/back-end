@@ -7,10 +7,10 @@ const {filterSkipField} = require('../middlewares/common');
 
 //-------------------------cap nhat / chinh sua thogn thin candidate-----------------------------------------
 exports.updateCandidateInfo = async (req, res, next) => {
-  //for candidate
-  const { avatar } = req.body;
-  const { title, name, dob, gender, email, phone, addressId, fullAddress } =
-    req.body;
+  try {
+      //for candidate
+  
+  const { title, name, dob, gender, email, phone, addressId, fullAddress } = req.body;
   //for candidate.profile
   const {
     aboutMe,
@@ -29,7 +29,7 @@ exports.updateCandidateInfo = async (req, res, next) => {
     certificationsCv,
   } = req.body;
 
-  const profile = {
+  let profile = {
     aboutMe,
     objective,
     education,
@@ -45,6 +45,7 @@ exports.updateCandidateInfo = async (req, res, next) => {
     activitiesCv,
     certificationsCv,
   };
+
   let candidateData = {
     title,
     name,
@@ -55,43 +56,22 @@ exports.updateCandidateInfo = async (req, res, next) => {
     addressId,
     fullAddress,
     profile,
-  };
+    };
 
-  const {userId} = req.user;
-
-  try {
-    let avatarLink = "";
-    if (gender == "Nam") {
-      avatarLink =
-        "https://res.cloudinary.com/djnekmzdf/image/upload/v1670878877/ifo/maledefault_fechep.jpg";
-    } else {
-      avatarLink =
-        "https://res.cloudinary.com/djnekmzdf/image/upload/v1670878938/ifo/74182470-default-female-avatar-profile-picture-icon-grey-woman-photo-placeholder-vector-illustration_iu7kdj.webp";
-    }
-    if (avatar) {
-      const upRs = await uploadImage(avatar, "ifo999");
-      avatarLink = upRs.secure_url;
-    }
-
-    const loggedUser = await User.findById(userId);
-
-    if (!loggedUser) {
-      return res.status(400).json("Không tìm thấy người dùng");
-    }
-
+    const {userId} = req.user;
+    console.log(userId);
+    
     let updatedCandidate = await Candidate.findOneAndUpdate(
       { userId: userId },
-      {
-        $set: { ...candidateData, avatar: avatarLink },
-      },
+      {$set: { ...candidateData}},
       { new: true }
     );
-    updatedCandidate = filterSkipField(updatedCandidate._doc, "_id");
+    // updatedCandidate = filterSkipField(updatedCandidate._doc, "_id");
 
-    console.log({ ...loggedUser._doc, ...updatedCandidate });
+
     return res
       .status(200)
-      .json({ updatedData: { ...loggedUser._doc, ...updatedCandidate } });
+      .json({ updatedData: { updatedCandidate } });
   } catch (e) {
     console.log(e);
     next(e);
@@ -255,7 +235,6 @@ exports.getAllCandidate = async (req, res, next) => {
   //-------------------------chi tiet cong ty theo Id cong ty-----------------------
   exports.getOneCandidate = async (req, res, next) => {
     try {
-      
       const candidate = await Candidate.findById(req.params.id);
       if(!candidate)return res.status(400).json("Ứng viên bạn đang tìm không tồn tại");
       res.status(200).json(candidate);

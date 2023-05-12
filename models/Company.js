@@ -11,7 +11,9 @@ const companySchema = new mongoose.Schema({
   nameCompany: { type: String, required: true },
   location: { type: String, required: true },
   phone: { type: String, required: true },
-
+  detailAdress:{
+    type: String
+  },
   foundingAt: {
     type: Date
   },
