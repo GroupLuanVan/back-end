@@ -1,6 +1,6 @@
 const express = require('express');
 //import cac controller
-const {updateCandidateProfile, createResume, getMyCV, applyJob,cancelapplyjob, getUserProfileCvData, getAllCandidate} = require('../controllers/candidateController.js');
+const {updateCandidateProfile, createResume, getMyCV, applyJob,cancelapplyjob, getOneCandidate, getAllCandidate, updateCandidateInfo} = require('../controllers/candidateController.js');
 const {verifyToken, verifyTokenAndAdminAuth} = require('../middlewares/verifyToken');
 const candidateRouter = express.Router();
 
@@ -8,7 +8,6 @@ const candidateRouter = express.Router();
 
 
 candidateRouter.route("/all").get( getAllCandidate);
-candidateRouter.route("/:id/profile").put(verifyToken, verifyTokenAndAdminAuth, updateCandidateProfile);
 
 candidateRouter.route("/resume/create").post( verifyToken, createResume)
 
@@ -20,6 +19,9 @@ candidateRouter.route("/applyjob/:id").post( verifyToken, applyJob);
 //cancel apply job
 candidateRouter.route("/cancelapplyjob/:id").post(verifyToken, cancelapplyjob);
 
-candidateRouter.route("/:id/getuserprofilecvdata").get( getUserProfileCvData);
+//---------------------------------------chi tiet cong ty (lay theo ID cong ty)---------------------
+candidateRouter.route('/:id').get(getOneCandidate);
+//---------------------------------------cap nhat/chinh sua thong tin chi tiet cong ty----------------------
+candidateRouter.route('/updateinfo').post(verifyToken, updateCandidateInfo);
 
 module.exports = candidateRouter;

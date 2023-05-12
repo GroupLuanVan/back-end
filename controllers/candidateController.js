@@ -2,9 +2,11 @@ const Candidate = require ('../models/Candidate');
 const Resume = require ('../models/Resume');
 const User = require ('../models/User');
 const Jobpost = require ('../models/Jobpost');
-const Contact = require ('../models/Contact');
+const {filterSkipField} = require('../middlewares/common');
 
-exports.updateCandidateProfile = async (req, res, next) => {
+
+//-------------------------cap nhat / chinh sua thogn thin candidate-----------------------------------------
+exports.updateCandidateInfo = async (req, res, next) => {
   //for candidate
   const { avatar } = req.body;
   const { title, name, dob, gender, email, phone, addressId, fullAddress } =
@@ -12,7 +14,6 @@ exports.updateCandidateProfile = async (req, res, next) => {
   //for candidate.profile
   const {
     aboutMe,
-
     skills,
     objective,
     education,
@@ -30,7 +31,6 @@ exports.updateCandidateProfile = async (req, res, next) => {
 
   const profile = {
     aboutMe,
-
     objective,
     education,
     experience,
@@ -57,13 +57,7 @@ exports.updateCandidateProfile = async (req, res, next) => {
     profile,
   };
 
-  let loggedUserId = "";
-  if (req.user) {
-    loggedUserId = req.user.id;
-  } else {
-    const decodeTokenData = getDecodedTokenData(req);
-    loggedUserId = decodeTokenData.id;
-  }
+  const {userId} = req.user;
 
   try {
     let avatarLink = "";
@@ -79,14 +73,14 @@ exports.updateCandidateProfile = async (req, res, next) => {
       avatarLink = upRs.secure_url;
     }
 
-    const loggedUser = await User.findById(loggedUserId);
+    const loggedUser = await User.findById(userId);
 
     if (!loggedUser) {
-      return next(createError(404, "Không tìm thấy ứng viên"));
+      return res.status(400).json("Không tìm thấy người dùng");
     }
 
     let updatedCandidate = await Candidate.findOneAndUpdate(
-      { userId: loggedUserId },
+      { userId: userId },
       {
         $set: { ...candidateData, avatar: avatarLink },
       },
@@ -246,29 +240,6 @@ exports.cancelapplyjob = async (req, res, next) => {
   }
 };
 
-exports.getUserProfileCvData = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (user === null) return next(createError(404, "Khong tim thay User"));
-    let userDetail = {};
-    let candidate = await Candidate.findOne({ userId: user._id });
-    let candidateProfile = candidate.profile;
-
-    if (candidateProfile) {
-      candidate = filterSkipField(candidate._doc, "profile");
-      candidateProfile = filterSkipField(candidateProfile._doc, "_id");
-      userDetail = { ...candidate, ...candidateProfile };
-    } else {
-      userDetail = { ...candidate };
-    }
-    res.status(200).json({ ...user._doc, ...userDetail });
-  } catch (e) {
-    console.log(e);
-    next(e);
-  }
-};
-
-
 //----------------------------------------------------hiển thị tất cả candidate------------------------------------------------
 exports.getAllCandidate = async (req, res, next) => {
   try {
@@ -280,3 +251,30 @@ exports.getAllCandidate = async (req, res, next) => {
     next(err);
   }
 }
+
+  //-------------------------chi tiet cong ty theo Id cong ty-----------------------
+  exports.getOneCandidate = async (req, res, next) => {
+    try {
+      
+      const candidate = await Candidate.findById(req.params.id);
+      if(!candidate)return res.status(400).json("Ứng viên bạn đang tìm không tồn tại");
+      res.status(200).json(candidate);
+    } catch (err) {
+        next(err);
+    }
+  };
+//-----------------cap nhat thong tin cong ty---------------------------
+  // exports.updateCandidateInfo = async (req, res, next) => {
+  //   try {
+  //     const {userId} = req.user;
+  //     console.log(userId);
+  //     const candidate = await Candidate.findOneAndUpdate(
+  //       {userId: userId},
+  //       { $set: { ...req.body } },
+  //       { new: true }
+  //     );
+  //     res.status(200).json(candidate);
+  //   } catch (err) {
+  //       next(err);
+  //   }
+  // };

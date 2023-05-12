@@ -8,8 +8,7 @@ const jobpostRouter = express.Router();
 const {verifyToken} = require('../middlewares/verifyToken');
 //all post no limit
 jobpostRouter.route('/all/home').get(getAllPost)
-//all post base on title or location
-jobpostRouter.route('/all').get(findJobpostBaseOnTitleAndLocation)
+
 jobpostRouter.route('/').post(verifyToken, createOneJobpost);
 
 jobpostRouter.route('/showallpost/:id').get(getAllJobpostsBaseOnCompanyId);

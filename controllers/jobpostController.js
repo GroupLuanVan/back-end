@@ -162,27 +162,3 @@ exports.deleteOneJobpost = async (req, res, next)=>{
     }
 }
 
-//---------------------------tìm kiếm theo title và location-------------------------
-exports.findJobpostBaseOnTitleAndLocation = async (req, res, next)=>{
-  try{
-    const title =   req.query.title;
-    const location = req.query.location; 
-    if(title && !location) {
-      const  post = await Jobpost.find({title:title});
-      console.log(!location)
-    } else if(!title && location){
-      const  post = await Jobpost.find({location:/location/});
-    }
-    
-    if(!post) res.status(404).json("Không tìm thấy công việc phù hợp") ;
-    console.log(post);
-    res.status(200).json({
-      status: 'success',
-      data: post.length, post
-  })
-      
-  }catch(error){
-    console.log(error);
-      res.json(error)
-  }
-}

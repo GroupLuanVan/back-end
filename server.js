@@ -19,7 +19,7 @@ const companyRoute = require('./routes/companyRoute');
 const contactRoute = require('./routes/contactRoute');
 const candidateRoute = require('./routes/candidateRoute');
 const resumeRoute = require('./routes/resumeRoute');
-
+const searchRoute = require('./routes/searchRoute');
 const { register } = require('./controllers/authController');
 
 //chay cai server len
@@ -42,6 +42,7 @@ app.use('/api/company', companyRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/candidate", candidateRoute);
 app.use("/api/resume", resumeRoute);
+app.use("/api/search", searchRoute);
 //cong 5000
 const port = process.env.APP_PORT;
 
