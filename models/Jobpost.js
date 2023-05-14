@@ -26,7 +26,11 @@ const jobpostSchema = new mongoose.Schema({
       type: String,
       enum: ["Toàn thời gian", "Bán thời gian", "Làm từ xa"]
     },
-
+    status: {
+      type: Number,
+      enum: [1, 2, 3],
+      default: 1,
+    },
     //ngay het han nhan ho so
     endDate: { type: Date },
 

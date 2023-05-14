@@ -24,7 +24,7 @@ const contactSchema = new mongoose.Schema(
     
         process: {
           type: Number,
-          enum: [1, 2, 3, 0],
+          enum: [1, 2, 3],
           default: 1,
         },
         price: {

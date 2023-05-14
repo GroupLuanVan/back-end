@@ -115,7 +115,11 @@ exports.createOneJobpost = async (req, res, next)=>{
         });
         await jobpost.save();
         
-        res.status(200).send("Tạo jobpost thành công!");
+        res.status(200).json({
+          status: 'success',
+          message:'Tạo bài đăng thành công',
+          data: jobpost
+      })
     }catch(error){
         console.log(error);
         return res.status(404).json("Tạo bài đăng tuyển dụng không thành công");
