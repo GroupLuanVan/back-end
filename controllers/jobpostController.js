@@ -166,3 +166,11 @@ exports.deleteOneJobpost = async (req, res, next)=>{
     }
 }
 
+exports.get4lastPost = async (req, res, next) => {
+  try {
+    const post = await Jobpost.find().sort({createdAt:-1}).limit(8).populate("companyId").populate("addressId").populate("positionId");
+    res.status(200).json({ result: post.length, jobpost: post });
+  } catch (err) {
+      next(err);
+  }
+};
