@@ -51,15 +51,36 @@ exports.getAllContact = async (req, res, next) => {
   };
 
 // -----------------------------------------xét duyệt ứng viên------------------------
+// exports.approvalCandidate = async (req, res, next) => {
+//   try {
+//     let contact = await Contact.findById(req.params.id);
+//     console.log(req.body.process);
+//     if(!contact) return res.status(400).json("Ứng viên này đã hủy đăng ký"); 
+//     if (req.body.process == 2) contact = await Contact.findByIdAndUpdate(req.params.id, {process: 2});
+//     if (req.body.process == 3) contact = await Contact.findByIdAndUpdate(req.params.id, {process: 3});
+    
+//     res.status(200).json(contact);
+//   } catch (err) {
+//       next(err);
+//   }
+// };
+
 exports.approvalCandidate = async (req, res, next) => {
   try {
     let contact = await Contact.findById(req.params.id);
     console.log(req.body.process);
-    if(!contact) return res.status(400).json("Ứng viên này đã hủy đăng ký"); 
-    if (req.body.process == 2) contact = await Contact.findByIdAndUpdate(req.params.id, {process: 2});
-    if (req.body.process == 3) contact = await Contact.findByIdAndUpdate(req.params.id, {process: 3});
-    
-    res.status(200).json(contact);
+    if(!contact) return res.status(400).json("Ứng viên này đã hủy đăng ký");
+    let rs; 
+    if (req.body.process == 2) rs = await Contact.findByIdAndUpdate(req.params.id,       {
+      $set: {  process: 2 },
+    },
+    { new: true });
+    if (req.body.process == 3) rs = await Contact.findByIdAndUpdate(req.params.id,       {
+      $set: { process: 3 },
+    },
+    { new: true });
+    console.log(rs);
+    res.status(200).json(rs);
   } catch (err) {
       next(err);
   }

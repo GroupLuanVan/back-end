@@ -97,12 +97,8 @@ const jobpostSchema = new mongoose.Schema({
       type: String,
     },
 
-    // loai cong viec (Back-end,...)
-    categoryId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Jobcategory",
-      required: true,
-    },
+
+    
 
     // id cong ty
     companyId: {

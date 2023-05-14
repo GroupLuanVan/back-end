@@ -59,7 +59,7 @@ exports.updateCandidateInfo = async (req, res, next) => {
     };
 
     const {userId} = req.user;
-    console.log(userId);
+
     
     let updatedCandidate = await Candidate.findOneAndUpdate(
       { userId: userId },
@@ -117,6 +117,31 @@ exports.createResume = async (req, res, next) => {
     next(e);
   }
 };
+//---------------------------------------------Xóa CV---------------------------------
+exports.deleteResume = async (req, res, next) => {
+  try {
+    const {userId} = req.user;
+    const candidate = await Candidate.findOne({userId});
+    if (!candidate) {
+      return res.status(400).json("Không tìm thấy người dùng");
+    }
+    const cv = await Resume.findOneAndDelete({candidateId: candidate.id});
+    if(!cv || cv == undefined) return res.status(400).json("Chưa tạo CV");
+    let candidate2 = await Candidate.findOneAndUpdate(
+      
+        { _id: candidate.id },
+      {
+        $unset: { activatedCvId:"" },
+      },
+      { new: true }
+    )
+    res.status(200).json({ status: "success", message: "Xoá CV thành công", data: candidate2});
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+};
+
 
 //----------------------------------------------------------------Hien thi CV-------------------------------------------------
 exports.getMyCV = async (req, res, next) => {

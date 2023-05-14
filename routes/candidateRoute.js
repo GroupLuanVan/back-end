@@ -1,6 +1,6 @@
 const express = require('express');
 //import cac controller
-const {updateCandidateProfile, createResume, getMyCV, applyJob,cancelapplyjob, getOneCandidate, getAllCandidate, updateCandidateInfo} = require('../controllers/candidateController.js');
+const {updateCandidateProfile, createResume, getMyCV, applyJob,cancelapplyjob, getOneCandidate, getAllCandidate, updateCandidateInfo,deleteResume} = require('../controllers/candidateController.js');
 const {verifyToken, verifyTokenAndAdminAuth} = require('../middlewares/verifyToken');
 const candidateRouter = express.Router();
 
@@ -8,10 +8,13 @@ const candidateRouter = express.Router();
 
 
 candidateRouter.route("/all").get( getAllCandidate);
+//----------------------------------------------Tao CV------------------------------
+candidateRouter.route("/resume/create").post( verifyToken, createResume);
 
-candidateRouter.route("/resume/create").post( verifyToken, createResume)
+//----------------------------------------------Xoa CV---------------------------------
+candidateRouter.route("/resume/delete").delete( verifyTokenAndAdminAuth, deleteResume)
 
-//hien thi CV
+//------------------------------------------hien thi CV------------------------------------
 candidateRouter.route("/resume").get(verifyToken, getMyCV);
 
 candidateRouter.route("/applyjob/:id").post( verifyToken, applyJob);
