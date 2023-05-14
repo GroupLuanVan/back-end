@@ -9,7 +9,7 @@ const Candidate = require ('../models/Candidate');
 
 exports.getAllPost = async (req, res, next) => {
     try {
-      const post = await Jobpost.find().populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
+      const post = await Jobpost.find().populate("companyId").populate("addressId").populate("positionId");
       res.status(200).json({ result: post.length, jobpost: post });
     } catch (err) {
         next(err);
@@ -59,7 +59,7 @@ exports.getAllJobposts = async (req, res, next)=>{
 // Get All Post base on Company
 exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
   try {
-    const allJobs = await Jobpost.find({companyId: (req.params.id)}).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
+    const allJobs = await Jobpost.find({companyId: (req.params.id)}).populate("companyId").populate("addressId").populate("positionId");
     if (allJobs == null)
           return res.status(404).send("Không tìm thấy bài đăng tuyển dụng");
     res.status(200).json({ result: allJobs.length, jobsPage: allJobs });
@@ -71,7 +71,7 @@ exports.getAllJobpostsBaseOnCompanyId = async (req, res, next)=>{
 // -------------------------------------------------Get  Post base on postId--------------------------------
 exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
   try {
-    const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
+    const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId");
     
 
     if (jobPost === null) return res.status(404).json("Không tìm thấy bài đăng tuyển dụng");
@@ -87,7 +87,7 @@ exports.getJobpostsBaseOnPostId = async (req, res, next)=>{
 //--------------------------------------------------------- Get  Post base on postId-------------------------------------
 exports.getJobpostsBaseOnPostIdWhenLogin = async (req, res, next)=>{
   try {
-    const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId").populate("categoryId");
+    const jobPost = await Jobpost.findById(req.params.id).populate("companyId").populate("addressId").populate("positionId");
     if (jobPost === null) return res.status(404).json("Không tìm thấy bài đăng tuyển dụng");
     const {userId} = req.user;
     const candidate = await Candidate.findOne({userId});

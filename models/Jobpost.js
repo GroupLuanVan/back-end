@@ -1,7 +1,7 @@
 const mongoose = require ('mongoose');
 const Address = require ('./Address.js');
 // const Company = require ('./Company.js');
-// const Jobcategory = require ('./Jobcategory.js');
+
 // const Worktype = require ('./Worktype.js');
 // const Workexp = require ('./Workexp.js');
 // const Position = require ('./Position.js');

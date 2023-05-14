@@ -3,7 +3,7 @@ const Resume = require ('../models/Resume');
 const User = require ('../models/User');
 const Jobpost = require ('../models/Jobpost');
 const {filterSkipField} = require('../middlewares/common');
-
+const Contact = require ('../models/Contact');
 
 //-------------------------cap nhat / chinh sua thogn thin candidate-----------------------------------------
 exports.updateCandidateInfo = async (req, res, next) => {
@@ -172,9 +172,11 @@ try {
   // console.log(jobpost.id); 
   const {userId} = req.user;
   const candidate = await Candidate.findOne({userId});
+  const resume = await Resume.findOne({candidateId: candidate.id });
+  if(!resume) return res.status(400).json({message: "Bạn chưa tạo CV"});
   
   const contact = await Contact.findOne({$and: [{candidateId: candidate.id, jobpostId: jobpost.id}] });
-  if(contact) return res.status(400).json({message: "Đã ứng tuyển vào bài đăng này", data: contact});;
+  if(contact) return res.status(400).json({message: "Đã ứng tuyển vào bài đăng này", data: contact});
   const candidate2 = await Candidate.findOneAndUpdate(
     {userId} ,
     { $push: { applyJobs: jobpost.id } },
@@ -182,23 +184,15 @@ try {
   );
   const candidate3 = await Candidate.findOne({userId})
   // console.log(candidate2);
-  const resume = await Resume.findOne({candidateId: candidate.id });
   if (resume) {
     const newcontact = await Contact.create({
       jobpostId: jobpost.id,
       companyId: jobpost.companyId,
       candidateId: candidate._id,
-      resumeId: resume._id
-      
+      resumeId: resume._id  
     })
-  } else {
-    const newcontact = await Contact.create({
-      jobpostId: jobpost.id,
-      companyId: jobpost.companyId,
-      candidateId: candidate.id
-      
-    });
   }
+  
 
   res.status(200).json({
     message: "Ứng tuyển thành công",
