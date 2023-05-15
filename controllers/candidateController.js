@@ -4,6 +4,7 @@ const User = require ('../models/User');
 const Jobpost = require ('../models/Jobpost');
 const {filterSkipField} = require('../middlewares/common');
 const Contact = require ('../models/Contact');
+const { default: axios } = require('axios');
 
 //-------------------------cap nhat / chinh sua thogn thin candidate-----------------------------------------
 exports.updateCandidateInfo = async (req, res, next) => {
@@ -101,6 +102,7 @@ exports.createResume = async (req, res, next) => {
         candidateId: candidate.id,
       });
       savedResume = await resumeToSave.save();
+      await axios.get("http://127.0.0.1:8080/update_resume")
     }
     
     await Candidate.findOneAndUpdate(

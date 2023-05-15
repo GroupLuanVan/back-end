@@ -4,6 +4,7 @@ const Contact = require ('../models/Contact');
 // const Worktype = require ('../models/Worktype');
 // const Workexp = require ('../models/Workexp');
 const Candidate = require ('../models/Candidate');
+const { default: axios } = require('axios');
 
 // Get all Jobpost (no limit)
 
@@ -114,6 +115,7 @@ exports.createOneJobpost = async (req, res, next)=>{
             companyId: company._id
         });
         await jobpost.save();
+        await axios.get("http://127.0.0.1:8080/update_Job")
         
         res.status(200).json({
           status: 'success',
