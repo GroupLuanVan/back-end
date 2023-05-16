@@ -101,17 +101,19 @@ exports.createResume = async (req, res, next) => {
         ...req.body,
         candidateId: candidate.id,
       });
+      
       savedResume = await resumeToSave.save();
+      await Candidate.findOneAndUpdate(
+        { _id: candidate.id },
+        {
+          $set: { activatedCvId: savedResume.id },
+        },
+        { new: true }
+      );
       await axios.get("http://127.0.0.1:8080/update_resume")
     }
     
-    await Candidate.findOneAndUpdate(
-      { _id: candidate.id },
-      {
-        $set: { activatedCvId: savedResume.id },
-      },
-      { new: true }
-    );
+
 
     res.status(200).json({ savedResumeId: savedResume.id , message: "Tạo CV thành công"});
   } catch (e) {
